@@ -1,9 +1,11 @@
 const express = require('express')
+var cors = require('cors')
 const bodyParser = require('body-parser')
 const db = require('./queries')
 var app = express();
 const port = 8000
 
+app.use(cors())
 app.use(bodyParser.json())
 app.use(
   bodyParser.urlencoded({
@@ -19,6 +21,7 @@ app.get('/items', db.getItems)
 app.get('/items/:id', db.getItemById)
 app.post('/items', db.createItem)
 app.put('/items/:id', db.updateItem)
+app.put('/items', db.updateAllItems)
 app.delete('/items/:id', db.deleteItem)
 
 var server = app.listen(port, () => {
@@ -28,7 +31,10 @@ var server = app.listen(port, () => {
    console.log("Example app listening at http://%s:%s", host, port)
 })
 
-
+/*
+CORS:
+https://expressjs.com/en/resources/middleware/cors.html
+*/
 
 
 /*IN PURE NODE JS:
