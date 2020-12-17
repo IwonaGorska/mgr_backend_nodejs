@@ -7,6 +7,16 @@ const pool = new Pool({
   port: 5432,
 })
 
+/*
+I had to change 'send' to 'json' everywhere as angular doesn't accept text type of response by default
+and trying tochange it costed me a lot of time, looks like options object is not equal expect options object 
+though the structure is copied from official documentation...
+what is more httpObserve had a bug in angular's github and disappeared from the '@angular/common/http/src/client'
+but it's not documented where to find it now, I don't see it in any folder of the project and also npm 
+can't install it
+but anyway they require it in options 
+*/
+
 const getItems = (request, response) => {
     pool.query('SELECT * FROM items ORDER BY item_id ASC', (error, results) => {
       if (error) {
@@ -34,7 +44,9 @@ const createItem = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(201).send(`Item added with ID: ${results.insertId}`)
+    // response.status(201).send(`Item added with ID: ${results.insertId}`)
+    // response.status(201).send('Item added ' + results) 
+    response.status(201).json(results.rows)
   })
 }
  
@@ -48,7 +60,8 @@ const updateAllItems = (request, response) => {
       if (error) {
         throw error
       }
-      response.status(200).send(`Items modified`)
+      // response.status(200).send(`Items modified`)
+      response.status(200).json(results.rows)
     }
   )
 }
@@ -80,7 +93,8 @@ const updateItem = (request, response) => {
       if (error) {
         throw error
       }
-      response.status(200).send(`Item modified with ID: ${id}`)
+      // response.status(200).send(`Item modified with ID: ${id}`)
+      response.status(200).json(results.rows)
     }
   )
 }
@@ -92,7 +106,8 @@ const deleteItem = (request, response) => {
     if (error) {
       throw error
     }
-    response.status(200).send(`Item deleted with ID: ${id}`)
+    // response.status(200).send(`Item deleted with ID: ${id}`)
+    response.status(200).json(results.rows)
   })
 }
 
