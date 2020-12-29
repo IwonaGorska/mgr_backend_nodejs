@@ -50,7 +50,7 @@ const createItem = (request, response) => {
   })
 }
  
-const updateAllItems = (request, response) => {
+const updateAllItems = (request, response) => {  // not used
   const { name } = request.body
 
   pool.query(
@@ -111,6 +111,30 @@ const deleteItem = (request, response) => {
   })
 }
 
+const createTest = (request, response) => {
+  //tu sprobuj json na obiekt sb zmienic i dot walkingiem sczytywac kolejne informacje
+  //jak framework, feature, score
+  //bo to jako json przyjdzie razem
+  console.log("Request body = ", request.body)
+  console.log("Request body type = ", typeof request.body)
+  // const resData = JSON.parse(request.body);
+
+  // const { framework } = resData.framework
+  // const { feature } = resData.feature
+  // const { score } = resData.score
+  const  framework  = parseInt(request.body.framework)
+  const  feature  = parseInt(request.body.feature)
+  const  score  = parseFloat(request.body.score)
+
+  pool.query('INSERT INTO tests (framework, feature, score) VALUES ($1, $2, $3)', [framework, feature, score], (error, results) => {
+    if (error) {
+      throw error
+    }
+
+    response.status(201).json(results.rows)
+  })
+}
+
 module.exports = {
   getItems,
   getItemById,
@@ -119,6 +143,7 @@ module.exports = {
   updateAllItems,
   //updateManyItems,
   deleteItem,
+  createTest
 }
 
 

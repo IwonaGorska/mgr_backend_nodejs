@@ -21,8 +21,9 @@ app.get('/items', db.getItems)
 app.get('/items/:id', db.getItemById)
 app.post('/items', db.createItem)
 app.put('/items/:id', db.updateItem)
-app.put('/items', db.updateAllItems)
+app.put('/items', db.updateAllItems) // not used
 app.delete('/items/:id', db.deleteItem)
+app.post('/tests', db.createTest)
 
 var server = app.listen(port, () => {
    var host = server.address().address
