@@ -128,7 +128,7 @@ const createTest = (request, response) => {
   const  score  = parseFloat(request.body.score)
   const  avg_of  = parseFloat(request.body.avg_of)
 
-  pool.query('INSERT INTO tests (framework, feature, score, avg_of) VALUES ($1, $2, $3, $4)', [framework, feature, score, avg_of], (error, results) => {
+  pool.query('INSERT INTO tests (framework, feature, result, avg_of) VALUES ($1, $2, $3, $4)', [framework, feature, score, avg_of], (error, results) => {
     if (error) {
       throw error
     }
