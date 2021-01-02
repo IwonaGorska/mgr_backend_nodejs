@@ -115,6 +115,7 @@ const createTest = (request, response) => {
   //tu sprobuj json na obiekt sb zmienic i dot walkingiem sczytywac kolejne informacje
   //jak framework, feature, score
   //bo to jako json przyjdzie razem
+  // console.log("Request = ", request)
   console.log("Request body = ", request.body)
   console.log("Request body type = ", typeof request.body)
   // const resData = JSON.parse(request.body);
@@ -125,8 +126,9 @@ const createTest = (request, response) => {
   const  framework  = parseInt(request.body.framework)
   const  feature  = parseInt(request.body.feature)
   const  score  = parseFloat(request.body.score)
+  const  avg_of  = parseFloat(request.body.avg_of)
 
-  pool.query('INSERT INTO tests (framework, feature, score) VALUES ($1, $2, $3)', [framework, feature, score], (error, results) => {
+  pool.query('INSERT INTO tests (framework, feature, score, avg_of) VALUES ($1, $2, $3, $4)', [framework, feature, score, avg_of], (error, results) => {
     if (error) {
       throw error
     }
