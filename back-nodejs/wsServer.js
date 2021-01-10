@@ -17,6 +17,8 @@ var http = require('http');
 var history = [];
 // list of currently connected clients (users)
 var clients = [ ];
+var reactClients = [ ];
+var angularClients = [ ];
 
 /**
  * Helper function for escaping input strings
@@ -57,6 +59,15 @@ wsServer.on('request', function(request) {
     var connection = request.accept(null, request.origin); 
     // we need to know client index to remove them on 'close' event
     var index = clients.push(connection) - 1;
+    console.log(index);
+
+    var clientIndex;
+    if(request.origin == 'http://localhost:3000'){
+        clientIndex = reactClients.push(connection) - 1;
+    }
+    if(request.origin == 'http://localhost:4200'){
+        clientIndex = angularClients.push(connection) - 1;
+    }
 
     console.log((new Date()) + ' Connection accepted.');
 
@@ -69,7 +80,13 @@ wsServer.on('request', function(request) {
     connection.on('message', function(message) {
         if (message.type === 'utf8') { // accept only text
           var messObj = JSON.parse(message.utf8Data);
-          var userName = messObj.author;
+        //   var userName = messObj.author;
+
+        var numberInName = "";
+        if(clientIndex > 0){
+            numberInName = " " + clientIndex;
+        }
+        var userName = messObj.author + numberInName;
           var messageContent = messObj.message;
           console.log((new Date()) + ' Received Message from ' + userName + ': ' + messageContent);
           var obj = {
@@ -98,6 +115,8 @@ wsServer.on('request', function(request) {
                 + connection.remoteAddress + " disconnected.");
             // remove user from the list of connected clients
             clients.splice(index, 1);
+            reactClients.splice(index, 1);
+            angularClients.splice(index, 1);
         //     // push back user's color to be reused by another user
         //     colors.push(userColor);
         // }
